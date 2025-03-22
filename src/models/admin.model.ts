@@ -1,39 +1,54 @@
 import { model, Schema } from "mongoose";
-import { AdminDoc } from "../interfaces/admin";
-import { compare, hash } from "bcrypt";
+import { AdminDoc } from "../interfaces/admin.interface";
+import { compare } from "bcrypt";
+import { helper } from "../utils/Helper";
 
-const SALT_ROUND = 10;
+const adminSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      minLength: [3, "Name must be atleast 3 characters long"],
+      maxLength: [32, "Name cannot excessed more than 32 character"],
+    },
 
-const adminSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    minLength: [3, "Name must be atleast 3 characters long"],
-    maxLength: [32, "Name cannot excessed more than 32 character"],
+    role: {
+      type: String,
+      enum: ["Admin"],
+      default: "Admin",
+    },
+
+    email: {
+      type: String,
+      required: true,
+      index: true,
+      unique: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      minLength: [5, "Password must be atleast 5 characters long"],
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-
-  email: {
-    type: String,
-    required: true,
-    index: true,
-    unique: true,
-  },
-
-  password: {
-    type: String,
-    required: true,
-    minLength: [5, "Password must be atleast 5 characters long"],
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
-});
+  {
+    toJSON: {
+      transform: function (doc, ret: Partial<AdminDoc>) {
+        delete ret.password;
+        return ret;
+      },
+    },
+  }
+);
 
 adminSchema.pre("save", async function (this: AdminDoc, next: () => void) {
   if (!this.isModified("password")) return next();
-  this.password = await hash(this.password, SALT_ROUND);
+  this.password = await helper.hashPassword(this.password);
 });
 
 adminSchema.methods.comparePassword = async function (
