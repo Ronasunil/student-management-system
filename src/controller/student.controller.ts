@@ -6,7 +6,10 @@ import { NotAuthorized } from "../error/NotAuthorized";
 import { TaskModel } from "../models/task.model";
 import { BadRequest } from "../error/BadRequest";
 
-const login = async function (req: Request, res: Response): Promise<void> {
+export const login = async function (
+  req: Request,
+  res: Response
+): Promise<void> {
   const { email, password } = req.body as StudentLoginParams;
 
   const studentExists = await StudentModel.findOne({ email });
@@ -28,14 +31,38 @@ export const getTasks = async function (
 ): Promise<void> {
   const { studentId } = req.params as { studentId: string };
 
+  // Before hand checking student exist
   const student = await StudentModel.findById(studentId);
   if (!student)
     throw new BadRequest(
-      `User not foudn regarding this id:${studentId}`,
+      `User not found regarding this id:${studentId}`,
       "getTask"
     );
 
   const tasks = await TaskModel.find({ studentId });
 
   res.status(httpsStatus.OK).json({ message: "Student tasks", tasks });
+};
+
+export const markAsCompleted = async function (
+  req: Request,
+  res: Response
+): Promise<void> {
+  const { taskId } = req.params as { taskId: string };
+
+  // Before hand checking task exists
+  const task = await TaskModel.findById(taskId);
+  if (!task)
+    throw new BadRequest(
+      `Task not found regarding this id:${taskId}`,
+      "getTask"
+    );
+
+  const updatedTask = await TaskModel.findByIdAndUpdate(taskId, {
+    status: "Completed",
+  });
+
+  res
+    .status(httpsStatus.OK)
+    .json({ message: "Updated status of task", task: updatedTask });
 };
