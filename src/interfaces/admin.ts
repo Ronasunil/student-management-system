@@ -1,4 +1,4 @@
-import mongoose, { Document, Types } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface AdminLoginParams {
   email: string;
@@ -10,5 +10,6 @@ export interface AdminDoc extends Document {
   name: string;
   email: string;
   password: string;
+  createdAt: Date;
   comparePassword: (password: string) => Promise<Boolean>;
 }
