@@ -5,6 +5,7 @@ import { StudentModel } from "../models/student.model";
 import { NotAuthorized } from "../error/NotAuthorized";
 import { TaskModel } from "../models/task.model";
 import { BadRequest } from "../error/BadRequest";
+import { helper } from "../utils/Helper";
 
 export const login = async function (
   req: Request,
@@ -12,17 +13,28 @@ export const login = async function (
 ): Promise<void> {
   const { email, password } = req.body as StudentLoginParams;
 
-  const studentExists = await StudentModel.findOne({ email });
-  if (!studentExists)
+  const student = await StudentModel.findOne({ email });
+  if (!student)
     throw new NotAuthorized("Invalid email or password", "login student");
 
-  const isPasswordSame = await studentExists.comparePassword(password);
+  const isPasswordSame = await student.comparePassword(password);
   if (!isPasswordSame)
     throw new NotAuthorized("Invalid email or password", "login student");
 
+  // Signing token
+  const token = helper.signToken({
+    _id: student.id.toString(),
+    email: student.email,
+    name: student.name,
+    role: student.role,
+  });
+
+  // Setting cookie
+  helper.setCookie(res, token);
+
   res
     .status(httpsStatus.OK)
-    .json({ message: "Login successfull", student: studentExists });
+    .json({ message: "Login successfull", student: student });
 };
 
 export const getTasks = async function (

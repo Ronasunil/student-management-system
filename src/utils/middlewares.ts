@@ -1,17 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { Schema } from "joi";
 import { BadRequest } from "../error/BadRequest";
+import { PayLoad } from "../interfaces/student.interface";
 
 declare global {
   namespace Express {
     interface Request {
-      user: {
-        name: string;
-        email: string;
-        role: string;
-        _id: string;
-        iat?: number;
-      };
+      user: PayLoad;
     }
   }
 }

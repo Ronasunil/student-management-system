@@ -9,22 +9,32 @@ import { BadRequest } from "../error/BadRequest";
 import { StudentCreationParams } from "../interfaces/student.interface";
 import { TaskCreationParams } from "../interfaces/task.interface";
 import { TaskModel } from "../models/task.model";
+import { helper } from "../utils/Helper";
 
 const login = async function (req: Request, res: Response): Promise<void> {
   const { email, password } = req.body as AdminLoginParams;
 
   //   Check admin exist
-  const adminExists = await AdminModel.findOne({ email });
-  if (!adminExists)
+  const admin = await AdminModel.findOne({ email });
+  if (!admin)
     throw new NotAuthorized("Email or password is incorrect", "login");
   // Check password is same
   const isPasswordSame = await adminExists.comparePassword(password);
   if (!isPasswordSame)
     throw new NotAuthorized("Email or password is incorrect", "login admin");
 
-  res
-    .status(httpStatus.OK)
-    .json({ message: "Login successfull", admin: adminExists });
+  // Signing token
+  const token = helper.signToken({
+    _id: admin.id.toString(),
+    email: admin.email,
+    name: admin.name,
+    role: admin.role,
+  });
+
+  // Setting cookie
+  helper.setCookie(res, token);
+
+  res.status(httpStatus.OK).json({ message: "Login successfull", admin });
 };
 
 export const createStudent = async function (

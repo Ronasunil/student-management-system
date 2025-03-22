@@ -7,6 +7,7 @@ export interface StudentDoc extends Document {
   password: string;
   role: "Student";
   department: string;
+  comparePassword: (password: string) => Promise<Boolean>;
   createdAt: Date;
 }
 
@@ -20,4 +21,12 @@ export interface StudentCreationParams {
 export interface StudentLoginParams {
   email: string;
   password: string;
+}
+
+export interface PayLoad {
+  name: string;
+  email: string;
+  role: string;
+  _id: string;
+  iat?: number;
 }
