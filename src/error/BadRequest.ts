@@ -1,6 +1,6 @@
 import httpStatus from "http-status-codes";
 import { CustomError } from "./CustomError";
-import { ErrorMsg } from "../interfaces/error";
+import { ErrorMsg } from "../interfaces/error.interface";
 
 class BadRequest extends CustomError {
   statusCode = httpStatus.BAD_REQUEST;
