@@ -24,6 +24,11 @@ const adminSchema = new Schema({
     required: true,
     minLength: [5, "Password must be atleast 5 characters long"],
   },
+
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 adminSchema.pre("save", async function (this: AdminDoc, next: () => void) {
