@@ -1,4 +1,4 @@
-import { ErrorMsg } from "../interfaces/error.interface";
+import { ErrorMsg } from "../interfaces/error";
 
 abstract class CustomError extends Error {
   abstract status: string;

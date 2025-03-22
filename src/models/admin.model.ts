@@ -1,4 +1,8 @@
 import { model, Schema } from "mongoose";
+import { AdminDoc } from "../interfaces/admin";
+import { compare, hash } from "bcrypt";
+
+const SALT_ROUND = 10;
 
 const adminSchema = new Schema({
   name: {
@@ -12,27 +16,41 @@ const adminSchema = new Schema({
     type: String,
     required: true,
     index: true,
+    unique: true,
   },
 
   password: {
     type: String,
     required: true,
-    minLength: [5, "Name must be atleast 8 characters long"],
+    minLength: [5, "Password must be atleast 5 characters long"],
   },
 });
 
-const AdminModel = model("Admin", adminSchema);
+adminSchema.pre("save", async function (this: AdminDoc, next: () => void) {
+  if (!this.isModified("password")) return next();
+  this.password = await hash(this.password, SALT_ROUND);
+});
 
-const createDefaultAdmin = async function () {
+adminSchema.methods.comparePassword = async function (
+  password: string
+): Promise<Boolean> {
+  const adminPassword = (this as AdminDoc).password;
+  const isPasswordSame = await compare(password, adminPassword);
+  return isPasswordSame;
+};
+
+export const AdminModel = model<AdminDoc>("Admin", adminSchema);
+
+// Create default admin if it doesn't exist
+export const createDefaultAdmin = async function (): Promise<void> {
   try {
-    const admin = { email: "admin@admin.com", password: "admin" };
+    const admin = { email: "admin@admin.com", password: "admin", name: "Rona" };
+
     const adminExists = await AdminModel.findOne({ email: admin.email });
 
-    if (!adminExists) return;
-    await AdminModel.create();
+    if (adminExists) return;
+    await AdminModel.create(admin);
   } catch (err) {
     console.log("Error creatinf default admin", err);
   }
 };
-
-createDefaultAdmin();

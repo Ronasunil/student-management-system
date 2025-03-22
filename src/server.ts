@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { config } from "./Config";
 import { app } from "./app";
+import { createDefaultAdmin } from "./models/admin.model";
 
 const PORT = config.PORT || 2000;
 
@@ -15,6 +16,7 @@ const connectToMongodb = async function () {
 
 const startServer = async function () {
   await connectToMongodb();
+  await createDefaultAdmin();
   app.listen(PORT, () => {
     console.log(`Server started on port:${PORT}`);
   });

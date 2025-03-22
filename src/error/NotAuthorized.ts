@@ -1,7 +1,7 @@
 import httpStatus from "http-status-codes";
 
 import { CustomError } from "./CustomError";
-import { ErrorMsg } from "../interfaces/error.interface";
+import { ErrorMsg } from "../interfaces/error";
 
 class NotAuthorized extends CustomError {
   status = "FAILED";
