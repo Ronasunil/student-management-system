@@ -7,6 +7,7 @@ const PORT = config.PORT || 2000;
 const connectToMongodb = async function () {
   try {
     await mongoose.connect(config.MONGO_URI!);
+    console.log("Connected to mongodb");
   } catch (err) {
     console.log("Error connecting to mongodb", err);
   }
