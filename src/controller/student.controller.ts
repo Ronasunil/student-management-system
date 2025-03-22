@@ -31,7 +31,11 @@ export const getTasks = async function (
 ): Promise<void> {
   const { studentId } = req.params as { studentId: string };
 
-  // Before hand checking student exist
+  // Checking studentId Exist
+  if (!studentId)
+    throw new BadRequest("Please pass the id of student", "getTask");
+
+  //Checking student exist
   const student = await StudentModel.findById(studentId);
   if (!student)
     throw new BadRequest(
@@ -50,7 +54,11 @@ export const markAsCompleted = async function (
 ): Promise<void> {
   const { taskId } = req.params as { taskId: string };
 
-  // Before hand checking task exists
+  // Checking taskId Exist
+  if (!taskId)
+    throw new BadRequest("Please pass the id of task", "markAsCompleted");
+
+  //Checking task exists
   const task = await TaskModel.findById(taskId);
   if (!task)
     throw new BadRequest(
