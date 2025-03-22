@@ -4,6 +4,7 @@ import { TaskDoc } from "../interfaces/task.interface";
 const taskSchema = new Schema({
   studentId: {
     type: Schema.Types.ObjectId,
+    index: true,
     ref: "User",
     required: true,
   },

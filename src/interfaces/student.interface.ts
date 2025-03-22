@@ -16,3 +16,8 @@ export interface StudentCreationParams {
   password: string;
   department: string;
 }
+
+export interface StudentLoginParams {
+  email: string;
+  password: string;
+}

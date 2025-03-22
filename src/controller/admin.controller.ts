@@ -20,23 +20,21 @@ const login = async function (req: Request, res: Response): Promise<void> {
   // Check password is same
   const isPasswordSame = await adminExists.comparePassword(password);
   if (!isPasswordSame)
-    throw new NotAuthorized("Email or password is incorrect", "login");
+    throw new NotAuthorized("Email or password is incorrect", "login admin");
 
   res
     .status(httpStatus.OK)
     .json({ message: "Login successfull", admin: adminExists });
 };
 
-export const createUser = async function (
+export const createStudent = async function (
   req: Request,
   res: Response
 ): Promise<void> {
   const { department, email, name, password } =
     req.body as StudentCreationParams;
 
-  const studentExists = await StudentModel.findOne({ email }).select(
-    "-password"
-  );
+  const studentExists = await StudentModel.findOne({ email });
   if (!studentExists)
     throw new BadRequest("Student has already been created", "createUser");
 
