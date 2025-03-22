@@ -19,7 +19,7 @@ const login = async function (req: Request, res: Response): Promise<void> {
   if (!admin)
     throw new NotAuthorized("Email or password is incorrect", "login");
   // Check password is same
-  const isPasswordSame = await adminExists.comparePassword(password);
+  const isPasswordSame = await admin.comparePassword(password);
   if (!isPasswordSame)
     throw new NotAuthorized("Email or password is incorrect", "login admin");
 
