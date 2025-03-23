@@ -27,6 +27,8 @@ COPY --from=build /app/src ./src
 
 RUN npm ci --omit=dev &&  npm install -g pm2
 
+EXPOSE 2000
+
 CMD [ "npm", "start" ]
 
 
