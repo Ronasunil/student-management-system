@@ -22,7 +22,7 @@ An API-based Student Management System where an admin can add students, assign t
 
 ## Base URL
 
--http://localhost:2000
+- `http://localhost:2000`
 
 ## API Endpoints
 
