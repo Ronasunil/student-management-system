@@ -7,6 +7,12 @@ An API-based Student Management System where an admin can add students, assign t
 - Make sure **Node.js** and **npm** are installed.
 - To run with Docker, ensure **Docker Desktop** is installed.
 
+## ⚡️ Important Notes Before Running
+
+- Ensure `config.env` exists in the root directory with all necessary variables as specified in `config.env.sample`.
+- Make sure **TypeScript** is installed globally:
+- If not install it using npm i -g typescript
+
 ### Run Options
 
 1. **Development:** `npm run start:dev` (uses Nodemon)
