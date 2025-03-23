@@ -33,7 +33,7 @@ const accessOnly = function (
 ): (req: Request, res: Response, next: NextFunction) => void {
   return function (req: Request, res: Response, next: NextFunction) {
     if (role !== req.user.role)
-      throw new NotAuthorized(`${role} can't acess this route`, "");
+      throw new NotAuthorized(`${req.user.role} can't acess this route`, "");
 
     return next();
   };

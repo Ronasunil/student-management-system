@@ -51,7 +51,7 @@ const studentSchema = new Schema(
 );
 
 studentSchema.pre("save", async function (this: StudentDoc, next: () => void) {
-  if (!this.isModified(this.password)) return;
+  if (!this.isModified("password")) return;
   this.password = await helper.hashPassword(this.password);
 });
 

@@ -44,7 +44,7 @@ const createStudent = async function (
     req.body as StudentCreationParams;
 
   const studentExists = await StudentModel.findOne({ email });
-  if (!studentExists)
+  if (studentExists)
     throw new BadRequest("Student has already been created", "createUser");
 
   const student = await StudentModel.create({

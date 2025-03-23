@@ -8,6 +8,7 @@ import cors from "cors";
 
 import { adminRouter } from "./routes/admin.routes";
 import { studentRouter } from "./routes/student.routes";
+import { handleError, handleInvalidRoute } from "./error/errorHandler";
 
 const app = express();
 
@@ -34,5 +35,8 @@ app.use(cookieParser());
 // Routes middleware
 app.use("/api/v1/admins", adminRouter);
 app.use("/api/v1/students", studentRouter);
+
+app.all("*", handleInvalidRoute);
+app.use(handleError);
 
 export { app };

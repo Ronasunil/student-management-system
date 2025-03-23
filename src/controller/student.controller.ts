@@ -94,11 +94,15 @@ const markAsCompleted = async function (
     _id: taskId,
     studentId: req.user._id,
   });
-  if (!task) throw new BadRequest(`Task not found `, "getTask");
+  if (!task) throw new BadRequest(`Task not found `, "markAsCompleted");
 
-  const updatedTask = await TaskModel.findByIdAndUpdate(taskId, {
-    status: "Completed",
-  });
+  const updatedTask = await TaskModel.findByIdAndUpdate(
+    taskId,
+    {
+      status: "Completed",
+    },
+    { new: true, runValidators: true }
+  );
 
   res
     .status(httpsStatus.OK)

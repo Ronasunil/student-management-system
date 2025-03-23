@@ -8,7 +8,7 @@ const loginSchema = Joi.object({
     "string.empty": "Email cannot be empty",
   }),
 
-  password: Joi.string().min(6).max(32).trim().required().messages({
+  password: Joi.string().min(5).max(32).trim().required().messages({
     "any.required": "Password is required field",
     "string.base": "Password must be a string",
     "string.min": "Password must be atleast 6 characters",
