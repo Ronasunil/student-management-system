@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon src/server.ts"
+    "start:dev": "nodemon src/server.ts",
+    "build": "tsc && cp config.env build/",
+    "start": "pm2 start build/server.js -i 5 --attach",
+    "stop": "pm2 stop all",
+    "delete": "pm2 delete all"
   },
   "keywords": [],
   "author": "",
