@@ -21,6 +21,10 @@ An API-based Student Management System where an admin can add students, assign t
    - Build: `docker build -t sms -f Dockerfile .`
    - Run: `docker run -p 2000:2000 sms`
 
+### Postman api Doc
+
+- `https://documenter.getpostman.com/view/37792164/2sAYkHoJa3`
+
 ### Environment Setup
 
 - Check `config.env.sample` for required variables.
@@ -29,6 +33,10 @@ An API-based Student Management System where an admin can add students, assign t
 ## Base URL
 
 - `http://localhost:2000`
+
+## Hosted url
+
+- `http://54.162.79.36:2000`
 
 ## API Endpoints
 
