@@ -7,7 +7,7 @@ import { TaskModel } from "../models/task.model";
 import { BadRequest } from "../error/BadRequest";
 import { helper } from "../utils/Helper";
 
-export const login = async function (
+const studentLogin = async function (
   req: Request,
   res: Response
 ): Promise<void> {
@@ -37,10 +37,7 @@ export const login = async function (
     .json({ message: "Login successfull", student: student });
 };
 
-export const getTasks = async function (
-  req: Request,
-  res: Response
-): Promise<void> {
+const getTasks = async function (req: Request, res: Response): Promise<void> {
   const { studentId } = req.params as { studentId: string };
 
   // Checking studentId Exist
@@ -60,7 +57,29 @@ export const getTasks = async function (
   res.status(httpsStatus.OK).json({ message: "Student tasks", tasks });
 };
 
-export const markAsCompleted = async function (
+const getTaskStatus = async function (req: Request, res: Response) {
+  const { studentId } = req.params as { studentId: string };
+
+  // Checking studentId Exist
+  if (!studentId)
+    throw new BadRequest("Please pass the id of student", "getTask");
+
+  //Checking student exist
+  const student = await StudentModel.findById(studentId);
+  if (!student)
+    throw new BadRequest(
+      `User not found regarding this id:${studentId}`,
+      "getTask"
+    );
+
+  const tasks = await TaskModel.find({ studentId }).select(
+    "-dueTime -createdAt"
+  );
+
+  res.status(httpsStatus.OK).json({ message: "Student tasks status", tasks });
+};
+
+const markAsCompleted = async function (
   req: Request,
   res: Response
 ): Promise<void> {
@@ -71,12 +90,11 @@ export const markAsCompleted = async function (
     throw new BadRequest("Please pass the id of task", "markAsCompleted");
 
   //Checking task exists
-  const task = await TaskModel.findById(taskId);
-  if (!task)
-    throw new BadRequest(
-      `Task not found regarding this id:${taskId}`,
-      "getTask"
-    );
+  const task = await TaskModel.findOne({
+    _id: taskId,
+    studentId: req.user._id,
+  });
+  if (!task) throw new BadRequest(`Task not found `, "getTask");
 
   const updatedTask = await TaskModel.findByIdAndUpdate(taskId, {
     status: "Completed",
@@ -86,3 +104,5 @@ export const markAsCompleted = async function (
     .status(httpsStatus.OK)
     .json({ message: "Updated status of task", task: updatedTask });
 };
+
+export { studentLogin, getTaskStatus, getTasks, markAsCompleted };

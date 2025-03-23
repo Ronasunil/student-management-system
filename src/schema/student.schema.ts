@@ -27,3 +27,5 @@ const studentCreationSchema = Joi.object({
     "string.empty": "Password cannot be empty",
   }),
 });
+
+export { studentCreationSchema };

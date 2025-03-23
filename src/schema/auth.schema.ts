@@ -16,3 +16,5 @@ const loginSchema = Joi.object({
     "string.empty": "Password cannot be empty",
   }),
 });
+
+export { loginSchema };

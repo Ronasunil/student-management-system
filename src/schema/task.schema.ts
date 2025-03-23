@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const taskAssignSchema = Joi.object({
+const taskAssignSchema = Joi.object({
   studentId: Joi.string().hex().length(24).required().messages({
     "any.required": "studentId is a required field",
     "string.empty": "studentId cannot be empty",
@@ -27,3 +27,5 @@ export const taskAssignSchema = Joi.object({
     "date.greater": "dueTime must be in the future",
   }),
 });
+
+export { taskAssignSchema };

@@ -3,7 +3,6 @@ import httpStatus from "http-status-codes";
 import { AdminLoginParams } from "../interfaces/admin.interface";
 import { AdminModel } from "../models/admin.model";
 import { NotAuthorized } from "../error/NotAuthorized";
-
 import { StudentModel } from "../models/student.model";
 import { BadRequest } from "../error/BadRequest";
 import { StudentCreationParams } from "../interfaces/student.interface";
@@ -11,7 +10,7 @@ import { TaskCreationParams } from "../interfaces/task.interface";
 import { TaskModel } from "../models/task.model";
 import { helper } from "../utils/Helper";
 
-const login = async function (req: Request, res: Response): Promise<void> {
+const adminLogin = async function (req: Request, res: Response): Promise<void> {
   const { email, password } = req.body as AdminLoginParams;
 
   //   Check admin exist
@@ -37,7 +36,7 @@ const login = async function (req: Request, res: Response): Promise<void> {
   res.status(httpStatus.OK).json({ message: "Login successfull", admin });
 };
 
-export const createStudent = async function (
+const createStudent = async function (
   req: Request,
   res: Response
 ): Promise<void> {
@@ -58,13 +57,12 @@ export const createStudent = async function (
   res.status(httpStatus.OK).json({ message: "Student created", student });
 };
 
-export const assignTask = async function (
-  req: Request,
-  res: Response
-): Promise<void> {
+const assignTask = async function (req: Request, res: Response): Promise<void> {
   const { studentId, name, email, dueTime } = req.body as TaskCreationParams;
 
   const task = await TaskModel.create({ studentId, dueTime, email, name });
 
   res.status(httpStatus.OK).json({ message: "Task created", task });
 };
+
+export { adminLogin, createStudent, assignTask };
